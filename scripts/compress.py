@@ -9,13 +9,8 @@ bufsize=4096
 
 if __name__ == "__main__":
   compress = bz2.BZ2Compressor()
-  data = sys.stdin.read(bufsize)
-  while data:
-    cdata = compress.compress(data)
-    if cdata:
+  while data := sys.stdin.read(bufsize):
+    if cdata := compress.compress(data):
       sys.stdout.write(cdata)
-    data = sys.stdin.read(bufsize)
-
-  cdata = compress.flush()
-  if cdata:
+  if cdata := compress.flush():
     sys.stdout.write(cdata)

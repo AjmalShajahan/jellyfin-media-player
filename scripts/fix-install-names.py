@@ -13,10 +13,12 @@ def main(argv=tuple(sys.argv[1:])):
 
     bundle_path = Path(arguments.bundle[0])
     framework_path = bundle_path / 'Contents' / 'Frameworks'
-    framework_libs = set(file.name for file in framework_path.glob('*.dylib')).union(set(file.name for file in framework_path.glob('*.so')))
+    framework_libs = {
+        file.name for file in framework_path.glob('*.dylib')
+    }.union({file.name for file in framework_path.glob('*.so')})
     libs_to_fix = deque()
-    libs_to_fix.extend(file for file in bundle_path.glob('**/*.dylib'))
-    libs_to_fix.extend(file for file in bundle_path.glob('**/*.so'))
+    libs_to_fix.extend(iter(bundle_path.glob('**/*.dylib')))
+    libs_to_fix.extend(iter(bundle_path.glob('**/*.so')))
     while libs_to_fix:
         lib = libs_to_fix.popleft()
         # find the dependencies of the library
